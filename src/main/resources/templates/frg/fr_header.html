@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<!-- ******  ПАНЕЛЬ ВХОДА *******************************************************************************************-->
+<div data-th-fragment="head_start">
+    <div class="container-fluid">
+        Выполните вход
+        <br/>
+        <div class="ui-state-error" data-th-if="${err}">
+            <span class="ui-state-error-text" data-th-text="${err}?:''"   >span</span>
+        </div>
+    </div>
+</div>
+
+<!-- ******  ПОЛЬЗОВАТЕЛЬ ВОШЕЛ *************************************************************************************-->
+<div data-th-fragment="head_acc">
+    <div class="container-fluid">
+        <p data-th-text="${user.office.fullName}"> office</p>
+        <p>Вы вошли как <span data-th-text="${user.lastName}">lastName</span> <span data-th-text="${user.firstName}">firstName</span></p>
+    </div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/pdm/css/jquery-ui.css">
+    <link rel="stylesheet" href="/pdm/css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="/pdm/css/pdm.css">
+
+    <script src="/pdm/js/external/jquery/jquery.js"></script>
+    <script src="/pdm/js/jquery-ui.js"></script>
+    <title>Start page</title>
+</head>
+<body>
+<div class="container-fluid wrapper" >
+    <header class="row" data-th-include="~{frg/fr_header.html :: ${fr_head}?:'head_start'}">
+    </header>
+    <nav class="row" data-th-replace="~{frg/fr_nav.html :: ${fr_nav}?:'nav_start'}">
+        nav
+     </nav>
+    <main class="row">
+        <div class="col-sm"  data-th-replace="~{frg/fr_cabinet.html :: main_start}">
+            main
+        </div>
+    </main>
+    <footer class="row">
+        <div data-th-replace="~{frg/fr_footer.html :: footer_start}">
+        </div>
+    </footer>
+</div>
+<script src="/pdm/js/pdm.js"></script>
+</body>
+</html>

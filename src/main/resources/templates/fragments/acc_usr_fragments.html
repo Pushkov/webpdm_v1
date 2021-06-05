@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<div th:fragment="main_account_start">
+    Main_account_users_start
+</div>
+
+<div th:fragment="usr_all">
+    <form th:method="get">
+        <button type="submit" th:formaction="@{/mypdm/{usr}/users/create(usr = ${user})}">Создать пользователя
+        </button>
+    </form>
+    <br>
+    <table>
+        <tr>
+            <th>
+                Login
+            </th>
+            <th>
+                Имя
+            </th>
+            <th>
+                Фамилия
+            </th>
+            <th>
+                Бюро
+            </th>
+            <th>
+                Телефон
+            </th>
+            <th>
+                Права
+            </th>
+            <th>
+                Статус
+            </th>
+            <th>
+            </th>
+            <th th:if="${action} == 'edit'">
+            </th>
+        </tr>
+        <tr th:each="designer : ${designer_list}">
+            <td th:text="${designer.login}"/>
+            </td>
+            <td th:text="${designer.firstName}">
+            </td>
+            <td th:text="${designer.lastName}">
+            </td>
+            <td th:text="${designer.office.name?:''}">
+            </td>
+            <td th:text="${designer.phone?:'x'}">
+            </td>
+            <td th:text="${designer.role.getName()?:'права не заданы'}"></td>
+            <td th:text="${designer.state.getName()?:'статус не задан'}"></td>
+            <td>
+                <form>
+                    <button type="submit" th:formmethod="get"
+                            th:formaction="@{/mypdm/{usr}/users/{usr_id}(usr = ${user},usr_id=${designer.id})}"
+                            th:utext="${action} == 'edit'?'Редактировать':'Смотреть'"
+                    >
+                        Изменить
+                    </button>
+                </form>
+            </td>
+            <td th:if="${action} == 'edit'">
+                <form>
+                    <button type="submit" th:formmethod="get"
+                            th:formaction="@{/mypdm/{usr}/users/{usr_id}/delete(usr = ${user},usr_id=${designer.id})}">
+                        Удалить
+                    </button>
+                </form>
+
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div th:fragment="usr_single">
+    <form  th:object="${designer}">
+        <table>
+            <tr th:if="${designer.id}">
+                <td>
+                    <label>Id:</label>
+                </td>
+                <td>
+                    <label th:text="${designer.id}">id</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Login:</label>
+                </td>
+                <td>
+                    <label th:if="${action} != 'edit'" th:field="*{login}" th:text="${designer.login}">login</label>
+                    <input th:if="${action} == 'edit'"
+                            type="text"
+                           th:field="*{login}"
+                    >
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Имя:</label>
+                </td>
+                <td>
+                    <label th:if="${action} != 'edit'" th:field="*{firstName}" th:text="${designer.firstName}">login</label>
+                    <input th:if="${action} == 'edit'"
+                           type="text"
+                           th:field="*{firstName}"
+                    >
+                </td>
+            </tr>
+            <tr>
+            <td>
+                <label>Фамилия:</label>
+            </td>
+            <td>
+                <label th:if="${action} != 'edit'" th:field="*{lastName}" th:text="${designer.lastName}">login</label>
+                <input th:if="${action} == 'edit'"
+                       type="text"
+                       th:field="*{lastName}"
+                >
+            </td>
+        </tr>
+            <tr>
+                <td>
+                    <label>Права:</label>
+                </td>
+                <td>
+                    <label th:if="${action} != 'edit'" th:field="*{role}" th:text="${designer.role.getName()}">login</label>
+                    <select th:if="${action} == 'edit'"
+                            th:field="*{role}"
+                    >
+                        <option th:each="role : ${T(nicomed.webpdm.enums.UserRole).values()}"
+                                th:value="${role}"
+                                th:text="${role.getName()}">
+                            role
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Права:</label>
+                </td>
+                <td>
+                    <label th:if="${action} != 'edit'" th:field="*{state}" th:text="${designer.state.getName()}">login</label>
+                    <select th:if="${action} == 'edit'"
+                            th:field="*{state}"
+                    >
+                        <option th:each="state : ${T(nicomed.webpdm.enums.UserStatus).values()}"
+                                th:value="${state}"
+                                th:text="${state.getName()}">
+                            role
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" th:if="${designer.id}">
+                    <button type="submit"
+                            th:formmethod="post"
+                            th:formaction="@{/mypdm/{usr}/users/{usr_id}/update(usr = ${user},usr_id=${designer.id})}"
+                            th:utext="${action} == 'edit'?'Сохранить':'Назад'"
+                    >
+                        Обновить
+                    </button>
+                </td>
+                <td colspan="2" th:unless="${designer.id}">
+                    <button type="submit"
+                            th:formmethod="post"
+                            th:formaction="@{/mypdm/{usr}/users/create(usr = ${user})}"
+                    >
+                        Создать
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+</body>
+</html>

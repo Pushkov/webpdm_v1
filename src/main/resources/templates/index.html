@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="/css/mypdm.css" rel="stylesheet">
+    <title>Index</title>
+</head>
+<body>
+<div class="wrapper">
+    <header th:replace="~{fragments/header_fragments.html :: ${fr_head}?:'header_start'}">
+        tipa header
+    </header>
+    <div class="main_wrapper" th:switch="${index_main_section}">
+            <nav th:replace="~{fragments/navigation_fragments.html :: ${fr_nav}?:'nav_start'}">
+                tipa navigation
+            </nav>
+        <th:block th:case="*">
+            <main th:replace="~{fragments/main_index_fragments.html :: ${fr_main}?:'main_index_start'}">
+                tipa main data
+            </main>
+        </th:block>
+    </div>
+    <footer th:replace="~{fragments/footer_fragments.html :: ${fr_footer}?:'footer_start'}">
+        tipa footer
+    </footer>
+</div>
+</body>
+</html>

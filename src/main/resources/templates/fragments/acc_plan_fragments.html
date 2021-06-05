@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div th:fragment="main_account_start">
+    Main_account_planing_start
+</div>
+
+<div th:fragment="planpoint_all">
+    <table>
+        <tr>
+            <td>
+                <form>
+                    <button type="submit" th:method="get"
+                            th:formaction="@{/mypdm/{usr}/planing/all(usr = ${user})}">
+                        Показать все
+                    </button>
+                </form>
+            </td>
+            <form th:method="get" th:object="${planselection}">
+                <td>Сортировка по месячным планам:</td>
+                <td>
+                    <select th:field="*{month}">
+                        <!--                        <option th:unless="${planselection.month}" th:value="0" th:text="'Все года'">Все</option>-->
+                        <option th:value="-1" selected th:text="'Все мес'">Все</option>
+                        <option th:each="month,iter : ${T(nicomed.webpdm.enums.Months).values()}"
+                                th:value="${iter.index}"
+                                th:text="${month.getName()}"
+                        >Option 1
+                        </option>
+                    </select>
+
+                </td>
+                <td>
+                    <select th:field="*{year}">
+                        <option th:value="0" th:text="'Все года'">Все</option>
+                        <option th:each="year : ${year_list}"
+                                th:value="${year}"
+                                th:text="${year}"
+                        >Option 1
+                        </option>
+                    </select>
+                </td>
+                <td>
+                    <button type="submit"
+                            th:formaction="@{/mypdm/{usr}/planing/planpoint/list(usr = ${user})}">
+                        Выбрать
+                    </button>
+                </td>
+                <td>
+                    <button type="submit"
+                            th:formaction="@{/mypdm/{usr}/planing/planmoth/all(usr = ${user})}">
+                        Редактор планов
+                    </button>
+                </td>
+        </tr>
+    </table>
+    </form>
+
+    <form>
+        <button type="submit" th:method="get"
+                th:formaction="@{/mypdm/{usr}/planing/planpoint/create(usr = ${user})}">
+
+            Создать новый пункт плана
+        </button>
+    </form>
+    <table>
+        <tr>
+            <th>п/п</th>
+            <th>План</th>
+            <th>Наименование</th>
+            <th>Цех (первичный)</th>
+            <th>Основание для разработки</th>
+            <th>Исполнитель</th>
+            <th>Срок начала</th>
+            <th>Срок окончания</th>
+            <th>Даты текущего месяца</th>
+            <th>№ документа</th>
+            <!--            <th>Дата согласования специалистами УПиР</th>-->
+            <!--            <th>Дата согласования специалистами завода</th>-->
+            <th>Примечание</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr th:each="planpoint,iter : ${planpoint_list}">
+            <td>
+                <label hidden="true" th:text="${planpoint.id}">id</label>
+                <label th:text="${planpoint.orderInPlan}">pp</label>
+            </td>
+            <td>
+                <label th:text="|${month_list.get(planpoint.planmonth.month)}-${planpoint.planmonth.year}|">pp</label>
+            </td>
+            <td>
+                <label th:text="${planpoint.name}">name</label>
+            </td>
+            <td>
+                <label th:text="${planpoint.workshop.getName()}">workshop</label>
+            </td>
+            <td>
+                <label th:text="${planpoint.basics}">name</label>
+            </td>
+            <td>
+                <label th:text="${planpoint.designer.lastName}">designer</label>
+            </td>
+            <td>
+                <label th:text="${#calendars.format(planpoint.startMonth,'MMM yyyy')}">
+            </td>
+            <td>
+                <label th:text="${#calendars.format(planpoint.endMonth,'MMM yyyy')}">startDate</label>
+                <!--                <input type="date"  th:value="${#calendars.format(point.endMonth,'yyyy-MM-dd')}">-->
+            </td>
+            <td></td>
+            <td>
+                <label th:text="${planpoint.designation}">des</label>
+            </td>
+            <!--            <td>Дата согласования специалистами УПиР</td>-->
+            <!--            <td>Дата согласования специалистами завода</td>-->
+            <td>
+                <label th:text="${planpoint.comment}">comment</label>
+            </td>
+            <td>
+                <form>
+                    <button type="submit" th:method="get"
+                            th:disabled="${#arrays.length(planpoint.documents) == 0 ? 'true':'false'}"
+                            th:formaction="@{/mypdm/{usr}/planing/planpoint/{pp_id}(usr = ${user}, pp_id = ${planpoint.id} )}">
+                        Документы
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form>
+                    <button type="submit" th:method="get"
+                            th:formaction="@{/mypdm/{usr}/planing/planpoint/{pp_id}/edit(usr = ${user}, pp_id = ${planpoint.id} )}">
+                        Редакт.
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form>
+                    <button type="submit" th:method="get"
+                            th:disabled="${#arrays.length(planpoint.documents) == 0 ? 'false':'true'}"
+                            th:formaction="@{/mypdm/{usr}/planing/planpoint/{pp_id}/delete(usr = ${user}, pp_id = ${planpoint.id} )}">
+                        Удалить
+                    </button>
+                </form>
+            </td>
+        </tr>
+
+    </table>
+</div>
+
+<div th:fragment="planpoint_single">
+    <table>
+        <form method="post" th:object="${planpoint}">
+            <tr>
+                <td th:if="${planpoint.id}" colspan="100%">
+                    <button type="submit"
+                            th:formaction="@{/mypdm/{usr}/planing/planpoint/{pp_id}/update(usr = ${user}, pp_id = ${planpoint.id} )}">
+                        Сохранить
+                    </button>
+                </td>
+                <td th:unless="${planpoint.id}" colspan="100%">
+                    <button type="submit"
+                            th:formaction="@{/mypdm/{user}/planing/planpoint/create(user = ${user})}">
+                        создать
+                    </button>
+                </td>
+            </tr>
+            <!--            <tr>-->
+            <!--                <td>-->
+            <!--                    <select >-->
+            <!--                        <option th:each="month : ${T(nicomed.webpdm.enums.Months).values()}"-->
+            <!--                                th:value="${month}"-->
+            <!--                                th:text="${month.getName()}"-->
+            <!--                        >Option 1-->
+            <!--                        </option>-->
+            <!--                    </select>-->
+            <!--                </td>-->
+            <!--                <td>-->
+            <!--                    <select >-->
+            <!--                        <option th:value="0" th:text="'Все года'">Все</option>-->
+            <!--                        &lt;!&ndash;                        <option th:each="year : ${#numbers.sequence(1990,2025)}"&ndash;&gt;-->
+            <!--                        <option th:each="year : ${years_list}"-->
+            <!--                                th:value="${year}"-->
+            <!--                                th:text="${year}"-->
+            <!--                        >Option 1-->
+            <!--                        </option>-->
+            <!--                    </select>-->
+            <!--                </td>-->
+            <!--            </tr>-->
+            <tr>
+                <td>Пункт плана</td>
+                <td>
+                    <input type="text" th:field="*{orderInPlan}">
+                </td>
+            </tr>
+            <tr>
+                <td>Название</td>
+                <td>
+                    <input type="text" th:field="*{name}">
+                </td>
+            </tr>
+            <tr>
+                <td>обозначение</td>
+                <td>
+                    <input type="text" th:field="*{designation}">
+                </td>
+            </tr>
+            <tr>
+                <td>Цех</td>
+                <td>
+                    <select th:field="*{workshop}">
+                        <option th:each="work : ${T(nicomed.webpdm.enums.Workshop).values()}"
+                                th:value="${work}"
+                                th:text="${work.getName()}"
+                        >Option 1
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Исполнитель</td>
+                <td>
+                    <!--                    <input type="text" th:field="*{designer}">-->
+                    <select th:field="*{designer.id}">
+                        <option th:each="desig : ${designer_list}"
+                                th:value="${desig.id}"
+                                th:text="${desig.lastName}"
+                        >Option 1
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Основание для разработки</td>
+                <td>
+                    <input type="text" th:field="*{basics}">
+                </td>
+            </tr>
+            <tr>
+                <td>Комментарий</td>
+                <td>
+                    <input type="text" th:field="*{comment}">
+                </td>
+            </tr>
+
+        </form>
+    </table>
+
+</div>
+
+<div th:fragment="planpoint_docs">
+    <table>
+        <tr>
+            <th colspan="100%">Пункт плана</th>
+        </tr>
+        <tr>
+            <th>П/п</th>
+            <th>Наименование</th>
+            <th>Цех</th>
+            <th>Основание для разработки</th>
+            <th>Исполнитель</th>
+            <th>План</th>
+            <th>Листов</th>
+            <th>Листов А1</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr>
+            <td>
+                <label hidden="true" th:text="${planpoint.id}">id</label>
+                <label th:text="${planpoint.orderInPlan}">pp</label>
+            </td>
+            <td>
+                <label th:text="${planpoint.name}">name</label>
+            </td>
+            <td>
+                <label th:text="${planpoint.workshop.getName()}">workshop</label>
+            </td>
+            <td>
+                <label th:text="${planpoint.basics}">name</label>
+            </td>
+            <td>
+                <label th:text="${planpoint.designer.lastName}">designer</label>
+            </td>
+            <td>
+                <th:block th:with="mesiac = ${month_list.get(planpoint.planmonth.month)}">
+                    <span th:text="|${mesiac}-${planpoint.planmonth.year}|">date</span>
+                </th:block>
+            </td>
+            <td>
+                <label th:text="${sheets_count}">sheets</label>
+            </td>
+            <td>
+                <label th:text="${a1_count}">a1</label>
+            </td>
+            <td>
+                <form>
+                    <button type="submit" th:method="get"
+                            th:formaction="@{/mypdm/{usr}/planing/planpoint/{pp_id}/edit(usr = ${user}, pp_id = ${planpoint.id} )}">
+                        Редакт.
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form>
+                    <button type="submit" th:method="get"
+                            th:formaction="@{/mypdm/{usr}/planing/planpoint/{pp_id}/pdf(usr = ${user}, pp_id = ${planpoint.id} )}">
+                        PDF
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form>
+                    <!--                    <button type="submit" th:method="get"-->
+                    <!--                            th:formaction="@{/mypdm/{usr}/planing/planpoint/{pp_id}/xls(usr = ${user}, pp_id = ${planpoint.id} )}">-->
+                    XLS
+                    <!--                    </button>-->
+                </form>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table>
+        <tr>
+            <th colspan="100%">Документы из пункта</th>
+        </tr>
+        <tr>
+            <th>Обозначение</th>
+            <th>Наименование</th>
+            <th>Цех</th>
+            <th>Исполнитель</th>
+            <th>Форматы</th>
+            <th></th>
+
+        </tr>
+        <tr th:if="${#arrays.length(docs_inpp_list) == 0}">
+            <td colspan="100%">
+                В данном пункте плана пока не зарегистирировано ни одного документа.
+            </td>
+        </tr>
+        <tr th:unless="${#arrays.length(docs_inpp_list) == 0}" th:each="document,iter : ${docs_inpp_list}">
+            <td>
+                <span th:text="${document.des}">des</span>
+            </td>
+            <td>
+                <span th:text="${document.name}">name</span>
+            </td>
+            <td>
+                <span th:text="${document.workshop.getName()}">workshop</span>
+            </td>
+            <td>
+                <span th:text="${document.owner.lastName}">designer</span>
+            </td>
+            <td>
+                 <span th:each="frmt : ${document.formats}"
+                    th:text="${frmt.format.getName() + ' '}"> 1 </span>
+            </td>
+            <td>
+                <form>
+                    <button type="submit" th:method="get"
+                            th:formaction="@{/mypdm/{usr}/documents/{doc_id}(usr = ${user}, doc_id = ${document.id})}">
+                        <!--                    <button type="submit" th:disabled="${docum.owner.login == user ? 'false':'true'}" th:method="get"-->
+                        <!--                            th:formaction="@{/mypdm/{user}/documents/{des}(user = ${user}, des = ${docum.des})}">-->
+                        Edit
+                    </button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div th:fragment="planmonth_all">
+
+    <table>
+        <tr>
+            <td>
+                <form>
+                    <button type="submit" th:method="get"
+                            th:formaction="@{/mypdm/{usr}/planing/planmoth/create(usr = ${user})}">
+                        Создать
+                    </button>
+                </form>
+            </td>
+            <form th:method="get" th:object="${planselection}">
+                <td>Сортировка :</td>
+                <td>
+                    <select th:field="*{month}">
+                        <option th:value="-1" selected th:text="'Все мес'">Все</option>
+                        <option th:each="m,iter : ${T(nicomed.webpdm.enums.Months).values()}"
+                                th:value="${iter.index}"
+                                th:text="${m.getName()}"
+                        >Option 1
+                        </option>
+                    </select>
+
+                </td>
+                <td>
+                    <select th:field="*{year}">
+                        <option th:value="0" th:text="'Все года'">Все</option>
+                        <option th:each="year : ${year_list}"
+                                th:value="${year}"
+                                th:text="${year}"
+                        >Option 1
+                        </option>
+                    </select>
+                </td>
+                <td>
+                    <button type="submit"
+                            th:formaction="@{/mypdm/{usr}/planing/planmoth/list(usr = ${user})}">
+                        Выбрать
+                    </button>
+                </td>
+                <td>
+                    <button type="submit"
+                            th:formaction="@{/mypdm/{usr}/planing/planmoth/date(usr = ${user})}">
+                        By Date
+                    </button>
+                </td>
+            </form>
+        </tr>
+    </table>
+
+    <br>
+    <table>
+        <tr>
+            <th>id</th>
+            <th>Month</th>
+            <th>Year</th>
+            <th>View plan</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        <tr th:each="pm, iter : ${pm_list}">
+            <td>
+                <span th:text="${pm.id}">pm_id</span>
+            </td>
+            <td>
+                <span th:text="${pm.month}">pm_m</span>
+            </td>
+            <td>
+                <span th:text="${pm.year}">pm_y</span>
+            </td>
+            <td>view</td>
+            <td>edit</td>
+            <td>delete</td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>

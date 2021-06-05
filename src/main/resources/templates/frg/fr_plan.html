@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--    <meta charset="UTF-8">-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+
+<div data-th-fragment="plan_menu">
+    <!--    <form class="col-1" data-th-method="get">-->
+    <!--        <button type="submit">Все документы</button>-->
+    <!--    </form>-->
+    <!--    <form class="col-1" data-th-method="get">-->
+    <!--        <button type="submit">Мои документы</button>-->
+    <!--    </form>-->
+    <form class="col-2" data-th-method="get">
+        <button class="button_jqui"
+                type="submit"
+        >Создать пункт плана</button>
+    </form>
+</div>
+
+<!--*****************************************************************************************************************-->
+
+<div data-th-fragment="plan_list">
+
+    <table>
+        <tr>
+            <td>
+                <form>
+                    <button class="button_jqui"
+                            style="font-size: .85em"
+                            type="submit"
+                            data-th-method="get"
+                            data-th-formaction="@{/js/{usr}/planing/all(usr = ${user.id})}">
+                        Показать все
+                    </button>
+                </form>
+            </td>
+            <form data-th-method="get" >
+                <td class="ui-widget">Сортировка по месячным планам:</td>
+                <td>
+                    <select class="ui-widget" >
+                        <!--                        <option data-th-unless="${planselection.month}" data-th-value="0" data-th-text="'Все года'">Все</option>-->
+                        <option data-th-value="-1" selected data-th-text="'Все мес'">Все</option>
+                        <option data-th-each="month,iter : ${T(nicomed.webpdm.enums.Months).values()}"
+                                data-th-value="${iter.index}"
+                                data-th-text="${month.getName()}"
+                        >Option 1
+                        </option>
+                    </select>
+
+                </td>
+                <td>
+                    <select  class="ui-widget">
+                        <option data-th-value="0" data-th-text="'Все года'">Все</option>
+                        <option data-th-each="year : ${year_list}"
+                                data-th-value="${year}"
+                                data-th-text="${year}"
+                        >Option 1
+                        </option>
+                    </select>
+                </td>
+                <td>
+                    <button class="button_jqui"
+                            style="font-size: .85em"
+                            type="submit"
+                            data-th-formaction="@{/mypdm/{usr}/planing/planpoint/list(usr = ${user.id})}">
+                        Выбрать
+                    </button>
+                </td>
+                <td>
+                    <button class="button_jqui"
+                            style="font-size: .85em"
+                            type="submit"
+                            data-th-formaction="@{/mypdm/{usr}/planing/planmoth/all(usr = ${user.id})}">
+                        Редактор планов
+                    </button>
+                </td>
+            </form>
+        </tr>
+    </table>
+
+
+
+</div>
+
+<!--*****************************************************************************************************************-->
+
+
+</body>
+</html>

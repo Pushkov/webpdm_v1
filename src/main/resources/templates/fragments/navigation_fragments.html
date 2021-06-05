@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<!-- ******  ПАНЕЛЬ ВХОДА *******************************************************************************************-->
+<nav  th:fragment="nav_start">
+    <form th:method="post" th:object="${loginForm}">
+        <label>Пользователь:</label>
+        <br>
+        <input type="text" th:field="*{login}">
+        <br>
+        <label>Пароль:</label>
+        <br>
+        <input type="password" th:field="*{password}">
+        <br>
+        <button type="submit" th:formaction="@{/mypdm/login}">Войти</button>
+    </form>
+</nav>
+
+<!-- ******  ПОЛЬЗОВАТЕЛЬ ВОШЕЛ *************************************************************************************-->
+<nav  th:fragment="nav_account">
+    <form th:method="get">
+        <button class="button_jqui" type="submit" th:formaction="@{/mypdm/{user}/documents(user = ${user})}">Документы</button>
+    </form>
+    <br>
+    <form th:method="get">
+        <button type="submit" th:formaction="@{/mypdm/{user}/planing(user = ${user})}">Пункты плана</button>
+    </form>
+    <br>
+<!--    <form th:if="${user} == 'nicomed'" th:method="get">-->
+    <form th:method="get">
+        <button type="submit" th:formaction="@{/mypdm/{user}/users(user = ${user})}">Пользователи</button>
+    </form>
+    <br>
+    <form th:method="get">
+        <button type="submit" th:formaction="@{/mypdm/{user}/logoff(user = ${user})}">Сменить пользователя</button>
+    </form>
+</nav>
+
+
+</body>
+</html>

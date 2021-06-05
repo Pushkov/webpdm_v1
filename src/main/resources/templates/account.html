@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="/css/mypdm.css" rel="stylesheet"/>
+    <title>Account</title>
+    <!--    <title th:utext="${user} + ' - Личный кабинет'">Account</title>-->
+</head>
+<body>
+<div class="wrapper">
+    <header th:replace="~{fragments/header_fragments.html :: ${fr_head}?:'header_start'}">
+        tipa header
+    </header>
+    <div class="main_wrapper">
+        <nav th:replace="~{fragments/navigation_fragments.html :: ${fr_nav}?:'nav_start'}">
+            tipa navigation
+        </nav>
+        <div class="_main" th:switch="${account_main_section}">
+            <th:block th:case="'acc_document'">
+                <main th:replace="~{fragments/main_account_documents_fragments.html :: ${fr_doc_main}?:'main_account_start'}">
+                    tipa main data
+                </main>
+            </th:block>
+
+            <th:block th:case="'acc_user'">
+                <main th:replace="~{fragments/main_account_users_fragments.html :: ${fr_user_main}?:'main_account_start'}">
+                    tipa main data
+                </main>
+            </th:block>
+
+            <th:block th:case="'acc_planing'">
+                <main th:replace="~{fragments/main_account_planing_fragments.html :: ${fr_plan_main}?:'main_account_start'}">
+                    tipa main data
+                </main>
+            </th:block>
+
+            <th:block th:case="'acc_doc'">
+                <main th:replace="~{fragments/acc_doc_fragments.html :: ${fr_doc_main}?:'main_account_start'}">
+                    tipa main data
+                </main>
+            </th:block>
+            <th:block th:case="'acc_usr'">
+                <main th:replace="~{fragments/acc_usr_fragments.html :: ${fr_user_main}?:'main_account_start'}">
+                    tipa main data
+                </main>
+            </th:block>
+            <th:block th:case="'acc_plan'">
+                <main th:replace="~{fragments/acc_plan_fragments.html :: ${fr_plan_main}?:'main_account_start'}">
+                    tipa main data
+                </main>
+            </th:block>
+
+            <th:block th:case="*">
+                <main th:replace="~{fragments/main_account_fragments.html :: ${fr_main}?:'main_account_start'}">
+                    tipa main data
+                </main>
+            </th:block>
+        </div>
+    </div>
+    <footer th:replace="~{fragments/footer_fragments.html :: ${fr_footer}?:'footer_start'}">
+        tipa footer
+    </footer>
+</div>
+</body>
+</html>

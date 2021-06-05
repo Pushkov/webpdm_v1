@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <!-- <link rel="stylesheet" type="text/css" href="style.css"/>  -->
+    <title>Карточка готовности</title>
+</head>
+<body>
+
+<table class="tt">
+    <tr >
+        <td colspan="10" class="r_header r_bold bf" >
+            КОНТРОЛЬНАЯ КАРТОЧКА ГОТОВНОСТИ ПСД И КД
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" rowspan="3" class="r_bold bf">
+            Основание для разработки
+        </td>
+        <td class="r_bold r_poco bf">приказ</td>
+        <td colspan="4" class="r_poco">
+            <span th:utext="${ppBasicsPrikaz}?:''">prikaz</span>
+            </td>
+        <td class="r_bold r_small bf" >Месяц плана</td>
+        <td class="r_bold r_small bf" >№ п.плана</td>
+    </tr>
+    <tr>
+        <td class="r_bold r_poco bf">ТЗ или Т</td>
+        <td colspan="4" class="r_poco">
+            <span th:utext="${ppBasicsTz}?:''">tzz</span>
+        </td>
+        <td class="bl ">
+            <span th:utext="${ppMonth}?:''">month</span>
+        </td>
+        <td class="br">
+            <span th:utext="${ppInPlan}?:''">planPoint</span>
+        </td>
+    </tr>
+    <tr>
+        <td class="r_bold r_poco bf">С/З</td>
+        <td colspan="4" class="r_poco">
+            <span th:utext="${ppBasics}?:''">sz</span>
+        </td>
+        <td colspan="2" class="r_bold r_small bf">Подразделение-заказчик</td>
+    </tr>
+    <tr>
+        <td colspan="2" class="r_bold bf">Инв №</td>
+        <td colspan="6" class="r_bold bf">Обозначение документа</td>
+        <td colspan="2" class="br">
+            <span  th:utext="${ppWorkshop}?:''">workshop</span>
+        </td>
+    </tr>
+    <tr>
+        <td class="bf" colspan="2" rowspan="2" name="inv N"></td>
+        <td class="bf" colspan="6" rowspan="2">
+            <span class="r_norm" th:utext="${ppDocDes}?:''">doc designation</span>
+        </td>
+        <td colspan="2" class="r_bold r_poco bf">Рассылка</td>
+    </tr>
+    <tr>
+        <td class="r_small bf">Направление</td>
+        <td class="r_small bf">Кол.экз.</td>
+    </tr>
+    <tr>
+        <td colspan="8" class="r_bold bf">Наименование документа</td>
+        <td class="r_rassil " name="workshop 1">
+            <span class="r_rassil" th:utext="${ppWorkshop}?:''">workshop 1</span>
+        </td>
+        <td class="r_rassil br"  name="qty 1"></td>
+    </tr>
+    <tr>
+        <td class="bf" colspan="8" rowspan="3">
+            <span class="r_norm" th:utext="${ppName}?:''">doc name</span>
+        </td>
+        <td class="r_rassil" name="workshop 2"><span class="r_rassil">. </span>  </td>
+        <td class="r_rassil br" name="qty2"><span class="r_rassil"> </span>  </td>
+    </tr>
+    <tr>
+        <td class="r_rassil" name="workshop3"><span class="r_rassil">. </span>  </td>
+        <td class="r_rassil br" name="qty3"><span class="r_rassil"> </span>  </td>
+    </tr>
+    <tr>
+        <td class="r_poco" name="workshop 4"><span class="r_rassil">. </span>  </td>
+        <td class="r_poco br" name="qty4"><span class="r_rassil"> </span>  </td>
+    </tr>
+    <tr>
+        <td colspan="3" class="r_bold r_poco bf">№ разрешения или изменения</td>
+        <td colspan="5" class="r_bold r_poco bf">Причина корректировки ПСД или КД</td>
+        <td class="r_rassil" name="workshop 5"></td>
+        <td class="r_rassil br" name="qty5"></td>
+    </tr>
+    <tr>
+        <td class="bf" colspan="3" rowspan="2" name="№ izm"></td>
+        <td colspan="5" rowspan="2" name="izm basics"></td>
+        <td class="r_rassil bl" name="workshop 6">. </td>
+        <td class="r_rassil br" name="qty6"> </td>
+    </tr>
+    <tr>
+        <td class="r_rassil bl" name="workshop 6">. </td>
+        <td class="r_rassil br" name="qty6"> </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" class="r_bold bl bu bb">Кол-во листов</td>
+        <td colspan="2" class="bu br bb">
+            <span th:utext="${ppSheets}?:''">sheets</span>
+        </td>
+        <td colspan="2" class="r_bold bu bb">Кол-во листов А1</td>
+        <td colspan="2" class="bu bb br">
+            <span th:utext="${ppA1}?:''">sheets A1</span>
+        </td>
+        <td rowspan="3" class="r_bold r_small bu bb">Дата<br/>начала<br/>выполнения</td>
+        <td rowspan="3" class="r_poco br bu bb" name="start date"> </td>
+    </tr>
+    <tr>
+        <td class="r_bold r_poco bl bu bb">А4</td>
+        <td class="r_poco bb"><span class="r_poco" th:utext="${ppSheetA4}?:''">sheets A1</span> </td>
+        <td class="r_bold r_poco bl bu bb">А3</td>
+        <td class="r_poco bb"><span class="r_poco" th:utext="${ppSheetA3}?:''">sheets A1</span></td>
+        <td class="r_bold r_poco bl bu bb">А2</td>
+        <td class="r_poco bb"><span class="r_poco" th:utext="${ppSheetA2}?:''">sheets A1</span></td>
+        <td class="r_bold r_poco bl bu bb">А1</td>
+        <td class="r_poco bb"><span class="r_poco" th:utext="${ppSheetA1}?:''">sheets A1</span></td>
+    </tr>
+    <tr>
+        <td class="r_bold r_poco bl bu bb">А4x3</td>
+        <td class="r_poco"><span class="r_poco" th:utext="${ppSheetA4_3}?:''">sheets A1</span> </td>
+        <td class="r_bold r_poco bl bu bb">А3x3</td>
+        <td class="r_poco"><span class="r_poco" th:utext="${ppSheetA3_3}?:''">sheets A1</span> </td>
+        <td class="r_bold r_poco bl bu bb">А2x3</td>
+        <td class="r_poco"><span class="r_poco" th:utext="${ppSheetA2_3}?:''">sheets A1</span> </td>
+        <td class="r_bold r_poco bl bu bb"></td>
+        <td class="r_poco">  </td>
+    </tr>
+    <tr>
+        <td colspan="8" class="r_bold r_poco bf">Технико-экономические показатели</td>
+        <td rowspan="3" class="r_bold r_small bu bb" >Дата<br/>окончания<br/>выполнения</td>
+        <td rowspan="3" class="r_poco br bu bb" name="ens date"> </td>
+    </tr>
+    <tr>
+        <td colspan="5" class="r_bold r_poco bl bb">Общая сметная стоимость по проекту, тыс.руб.</td>
+        <td colspan="3"  class="r_poco bb" name="cena"> </td>
+    </tr>
+    <tr>
+        <td colspan="2" class="r_bold r_poco bl">стоимость СМР</td>
+        <td colspan="2" class="r_poco" name="smr"> </td>
+        <td colspan="2" class="r_bold r_poco bl">стоимость оборуд.</td>
+        <td colspan="2" class="r_poco" name="oborud"> </td>
+    </tr>
+</table>
+<table class="ttt " >
+    <tr class="r_poco" >
+        <td class="r_bold bf bl">Должность</td>
+        <td class="r_bold bf">Инженер</td>
+        <td class="r_bold bf">Нач.бюро</td>
+        <td class="r_bold bf">ГИП</td>
+        <td class="r_bold r_poco bf" >Вед.инж. группы<br/> СиН ОРиТП</td>
+        <td class="r_bold bf">Архивариус</td>
+    </tr>
+    <tr >
+        <td class="r_bold r_poco br bl">Фамилия</td>
+        <td>
+            <span class="r_poco" th:utext="${ppDesigner}?:''">designer</span>
+        </td>
+        <td class="bl">
+            <span  class="r_poco"th:utext="${ppMnOffice}?:''">mnOffice</span>
+        </td>
+        <td class="bl"></td>
+        <td class="bl"></td>
+        <td class= "bl br"></td>
+    </tr>
+    <tr class="r_small">
+        <td class="r_bold bl">Подпись</td>
+        <td class="bl"></td>
+        <td class="bl"></td>
+        <td class="bl"></td>
+        <td class="bl"></td>
+        <td class="bl br"></td>
+    </tr>
+    <tr class="r_small">
+        <td class="r_bold bb bl">Дата</td>
+        <td class="bb bl"></td>
+        <td class="bb bl"></td>
+        <td class="bb bl"></td>
+        <td class="bb bl"></td>
+        <td class="bb br bl"></td>
+    </tr>
+    <tr style="border: none">
+        <td style="border: none"></td>
+        <td style="border: none"></td>
+        <td style="border: none"></td>
+        <td style="border: none"></td>
+        <td  class="r_bold" style="border: none">Формат А5</td>
+        <td style="border: none"></td>
+    </tr>
+</table>
+
+</body>
+</html>

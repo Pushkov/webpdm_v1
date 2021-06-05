@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<!-- ******  ПАНЕЛЬ ВХОДА *******************************************************************************************-->
+<nav class="row " data-th-fragment="nav_start">
+<!--    <div class="container-fluid">-->
+        <form class="container-fluid" name="form" data-th-object="${form}">
+            <div class="row no-gutters" style="height: 100%">
+                <div class="col-sm">
+                </div>
+                <div class="col-sm">
+                    <label class="ui-widget">Пользователь:</label>
+                </div>
+                <div class="col-sm">
+                    <input class="ui-widget" type="text" name="login">
+                    <!--            <input class="ui-widget" type="text" name="login" data-th-field="*{login}">-->
+                </div>
+                <div class="col-sm">
+                    <label class="ui-widget">Пароль:</label>
+                </div>
+                <div class="col-sm">
+                    <input class="ui-widget" type="password" name="password">
+                    <!--            <input class="ui-widget" type="password" name="password" data-th-field="*{password}">-->
+                </div>
+                <div class="col-sm">
+                    <button class="button_jqui"
+                            type="submit"
+                            data-th-formmethod="post"
+                            data-th-formaction="@{/js/login}">Войти
+                    </button>
+                </div>
+                <div class="col-sm">
+                </div>
+            </div>
+        </form>
+<!--    </div>-->
+</nav>
+
+<!-- ******  ПОЛЬЗОВАТЕЛЬ ВОШЕЛ *************************************************************************************-->
+<nav class="row" data-th-fragment="nav_acc">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm">
+                <form data-th-method="get">
+                    <button class="button_jqui"
+                            type="submit"
+                            data-th-formaction="@{/js/{id}(id = ${user.id})}"
+                    >Личная
+                    </button>
+                </form>
+            </div>
+            <div class="col-sm">
+                <form data-th-method="get">
+                    <button class="button_jqui"
+                            type="submit"
+                            data-th-formaction="@{/js/{id}/documents(id = ${user.id})}"
+                    >Документы
+                    </button>
+                </form>
+            </div>
+            <div class="col-sm">
+                <form data-th-method="get">
+                    <button class="button_jqui"
+                            type="submit"
+                            data-th-formaction="@{/js/{id}/plan(id = ${user.id})}"
+                    >Пункты плана
+                    </button>
+                </form>
+            </div>
+            <div class="col-sm">
+                <!--    <form th:if="${user} == 'nicomed'" th:method="get">-->
+                <form data-th-method="get">
+                    <button class="button_jqui"
+                            type="submit"
+                            data-th-formaction="@{/js/{id}/users(id = ${user.id})}"
+                    >Пользователи
+                    </button>
+                </form>
+            </div>
+            <div class="col-sm">
+            </div>
+            <div class="col-sm">
+                <form data-th-method="get">
+                    <button class="button_jqui"
+                            type="submit"
+                            data-th-formaction="@{/js/{id}/logoff(id = ${user.id})}"
+                    >Выход
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</nav>
+
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+}
+
+.wrapper{
+    height: 100vh;
+    /*padding: 10px;*/
+    background-color: burlywood;
+}
+
+header{
+    height: 6vh;
+    background-color: burlywood;
+}
+nav{
+    height: 5vh;
+    background-color: burlywood;
+}
+nav form{
+    margin: auto;
+}
+nav button{
+    width: 100%;
+}
+
+main{
+    padding-left: 15px;
+    height: 84vh;
+    background-color: antiquewhite;
+}
+
+footer{
+    height: 5vh;
+    background-color: burlywood;
+}
+
+table {
+    border-collapse: collapse; /* Убираем двойные линии между ячейками */
+    /*border: black solid 1px;*/
+}
+
+td, th{
+    padding: 3px 8px; /* Поля вокруг содержимого таблицы */
+    border: 1px solid black; /* Параметры рамки */
+}
+
+th {
+    background: #c5b6a4; /* Цвет фона */
+}

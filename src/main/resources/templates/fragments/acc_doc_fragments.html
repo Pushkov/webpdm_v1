@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--    <meta charset="UTF-8">-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div th:fragment="main_account_start">
+    Main_account_documents_start
+</div>
+
+<div th:fragment="doc_start">
+    <form th:method="get">
+        <button type="submit" th:formaction="@{/mypdm/{usr}/documents/all(usr = ${user})}">Все документы</button>
+    </form>
+    <br>
+    <form th:method="get">
+        <button type="submit" th:formaction="@{/mypdm/{usr}/documents/my(usr = ${user})}">Мои документы</button>
+    </form>
+    <br>
+    <form th:method="get">
+        <button type="submit" th:formaction="@{/mypdm/{usr}/documents/create(usr = ${user})}">Создать документ
+        </button>
+    </form>
+</div>
+
+<!--*****************************************************************************************************************-->
+
+<div th:fragment="doc_all">
+    <form th:method="get">
+        <button type="submit" th:formaction="@{/mypdm/{usr}/documents/create(usr = ${user})}">Создать документ
+        </button>
+    </form>
+
+    <table>
+        <tr style="border: none">
+            <form>
+                <td style="border: none; text-align: center">
+
+                </td>
+                <td style="border: none"></td>
+                <td style="border: none">
+                    <button type="submit"
+                            style="width: 100%"
+                            data-th-text="Обозначение"
+                            data-th-formmethod="get"
+                            data-th-formaction="@{/mypdm/{usr}/documents/all/des(usr = ${user})}"
+                    >Asc
+                    </button>
+                </td>
+                <td style="border: none">
+                    <button type="submit"
+                            style="width: 100%"
+                            data-th-text="Наименование"
+                            data-th-formmethod="get"
+                            data-th-formaction="@{/mypdm/{usr}/documents/all/name(usr = ${user})}"
+                    >Asc
+                    </button>
+                </td>
+                <td style="border: none">
+                    <button type="submit"
+                            style="width: 100%"
+                            data-th-text="Цех"
+                            data-th-formmethod="get"
+                            data-th-formaction="@{/mypdm/{usr}/documents/all/workshop(usr = ${user})}"
+                    >Asc
+                    </button>
+                </td>
+                <td style="border: none">
+                    <button type="submit"
+                            style="width: 100%"
+                            data-th-text="Разраб"
+                            data-th-formmethod="get"
+                            data-th-formaction="@{/mypdm/{usr}/documents/all/owner(usr = ${user})}"
+
+                    >Asc
+                    </button>
+                </td>
+                <td style="border: none"></td>
+                <td style="border: none"></td>
+                <td style="border: none"></td>
+                <td style="border: none"></td>
+                <td style="border: none"></td>
+            </form>
+        </tr>
+
+        <form method="get" th:object="${docfilter_form}">
+            <tr>
+                <td rowspan="2" colspan="2">
+                    <button type="submit"
+                            th:formaction="@{/mypdm/{usr}/documents/all(usr = ${user})}"
+                    >Все документы
+                    </button>
+                </td>
+                <td>
+                    <!--                    <select th:field="*{desFilterType}">-->
+                    <!--                        <option th:each="dname,iter : ${filter_list}"-->
+                    <!--                                th:value="${iter.index}"-->
+                    <!--                                th:text="${dname}"-->
+                    <!--                        >Option 1-->
+                    <!--                        </option>-->
+                    <!--                    </select>-->
+                </td>
+                <td>
+                    <!--                    <select th:field="*{nameFilterType}">-->
+                    <!--                        <option th:each="nname,iter : ${filter_list}"-->
+                    <!--                                th:value="${iter.index}"-->
+                    <!--                                th:text="${nname}"-->
+                    <!--                        >Option 1-->
+                    <!--                        </option>-->
+                    <!--                    </select>-->
+                </td>
+                <td></td>
+                <td></td>
+                <td colspan="5" rowspan="2">
+                    <button type="submit"
+                            th:formaction="@{/mypdm/{usr}/documents/selection(usr = ${user})}">
+                        ВЫБОР
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <!--                    <input type="text"-->
+                    <!--                           placeholder="Обозначение"-->
+                    <!--                           th:field="*{desFilter}">-->
+                </td>
+                <td>
+                    <!--                    <input type="text"-->
+                    <!--                           placeholder="Наименование"-->
+                    <!--                           th:field="*{nameFilter}"></td>-->
+                <td>
+                    <select th:field="*{workshopId}">
+                        <option th:value="-1" th:text="'Все'">Все</option>
+                        <option th:each="work : ${T(nicomed.webpdm.enums.Workshop).values()}"
+                                th:value="${work.getId()}"
+                                th:text="${work.getName()}"
+                        >workshop
+                        </option>
+                    </select>
+                </td>
+                <td>
+                    <select th:field="*{designerId}">
+                        <option th:value="-1" th:text="'Все'">Все</option>
+                        <option th:each="ow : ${designer_list}"
+                                th:value="${ow.id}"
+                                th:text="${ow.lastName}"
+                        >dsigner
+                        </option>
+                    </select>
+                </td>
+            </tr>
+        </form>
+        <tr>
+
+            <th>План</th>
+            <th>Пункт<br> плана</th>
+            <th>Обозначение</th>
+            <th>Наименование</th>
+            <th>Цех (первичный)</th>
+            <th>Разработчик</th>
+            <th>Дата создания</th>
+            <th>Формат</th>
+            <!--            <th>Основание для разработки</th>-->
+            <th>Примечание</th>
+            <th>Редактировать</th>
+            <th>Удалить</th>
+        </tr>
+        <tr th:each="document : ${document_list}">
+            <td th:if="${document.planpoint}">
+                <th:block th:if="${document.planpoint.planmonth}">
+                    <th:block th:with="mesiac = ${month_list.get(document.planpoint.planmonth.month)}">
+                        <span th:text="|${mesiac}-${document.planpoint.planmonth.year}|">date</span>
+                    </th:block>
+                </th:block>
+                <th:block th:unless="${document.planpoint.planmonth}">
+                    <span>no date</span>
+                </th:block>
+            </td>
+            <td th:unless="${document.planpoint}">
+            </td>
+            <td th:if="${document.planpoint}">
+                <form>
+                    <button type="submit" th:disabled="${document.planpoint == null ? 'true':'false'}" th:method="get"
+                            th:formaction="@{/mypdm/{usr}/planing/planpoint/{pp_id}(usr = ${user}, pp_id = ${document.planpoint.id})}">
+                        <span th:text="|см. п.${document.planpoint.orderInPlan}|">btn</span>
+                    </button>
+                </form>
+            </td>
+            <td th:unless="${document.planpoint}">
+            </td>
+
+            <td th:text="${document.des}">
+                Обозначение
+            </td>
+            <td th:text="${document.name}">
+                Наименование
+            </td>
+            <td th:text="${document.workshop.getName() ?:'не задан'}">
+                Цех
+            </td>
+            <td th:text="${document.owner.lastName}">
+                Логин разработчика
+            </td>
+            <td th:text="${document.getCreationDate()}">
+                Дата
+            </td>
+            <td>
+                <span th:each="frmt : ${document.formats}"
+                      th:text="${frmt.format.getName() + ' '}"> 1 </span>
+            </td>
+            <!--            <td th:text="${docum.basics ?:'нет'}">-->
+            <!--                Основание для разработки-->
+            <!--            </td>-->
+            <td th:text="${document.comment?:'*'}">
+                Примечание
+            </td>
+            <td>
+                <form>
+                    <button type="submit" th:method="get"
+                            th:formaction="@{/mypdm/{usr}/documents/{doc_id}(usr = ${user}, doc_id = ${document.id})}">
+                        <!--                    <button type="submit" th:disabled="${docum.owner.login == user ? 'false':'true'}" th:method="get"-->
+                        <!--                            th:formaction="@{/mypdm/{user}/documents/{des}(user = ${user}, des = ${docum.des})}">-->
+                        Edit
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form>
+                    <button type="submit" th:disabled="${document.owner.login == user ? 'false':'true'}" th:method="get"
+                            th:formaction="@{/mypdm/{usr}/documents/{doc_id}/delete(usr = ${user}, doc_id = ${document.id})}">
+                        Del
+                    </button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<!--*****************************************************************************************************************-->
+
+<div th:fragment="doc_single">
+
+    <table>
+        <form th:method="post" th:object="${document}">
+            <tr th:if="${document.id}">
+                <td colspan="2">
+                    <button type="submit"
+                            th:formaction="@{/mypdm/{usr}/documents/{doc_id}/update(usr = ${user}, doc_id = ${document.id})}"
+                    >Сохранить документ
+                    </button>
+                </td>
+            </tr>
+            <tr th:unless="${document.id}">
+                <td colspan="2">
+                    <button type="submit"
+                            th:formaction="@{/mypdm/{usr}/documents/create(usr = ${user})}"
+                    >Создать документ
+                    </button>
+                </td>
+            </tr>
+            <tr th:if="${document.id}">
+                <td>
+                    <label>Id:</label>
+                </td>
+                <td>
+                    <label th:text="*{id}">id_hz</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Обозначение:</label>
+                </td>
+                <td>
+                    <input type="text"
+                           th:field="*{des}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Наименование:</label>
+                </td>
+                <td>
+                    <input type="text"
+                           th:field="*{name}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Цех (первичный):</label>
+                </td>
+                <td>
+                    <select th:field="*{workshop}">
+                        <option th:each="work : ${T(nicomed.webpdm.enums.Workshop).values()}"
+                                th:value="${work}"
+                                th:text="${work.getName()}"
+                        >Option 1
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Разработчик:</label>
+                </td>
+                <td>
+                    <select th:field="*{owner.id}">
+                        <option th:each="ow : ${designer_list}"
+                                th:value="${ow.id}"
+                                th:text="${ow.lastName}"
+                        >Option 1
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Пункт плана:</label>
+                </td>
+                <td>
+                    <select th:field="*{planpoint.id}">
+                        <option th:unless="${document.planpoint}" th:value="'null'" th:text="'***'"> opt 0</option>
+                        <option th:each="pp : ${planpoint_list}"
+                                th:value="${pp.id}"
+                                th:text="${pp.name}"
+                        >Option 1
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Включено в план:</label>
+                </td>
+                <td>
+                    <th:block th:if="${document.planpoint}">
+                        <th:block th:if="${document.planpoint.planmonth}">
+                            <!--                            <span type="text" th:text="${#dates.format(document.planpoint.planmonth.date,'MM-yyyy')}">date</span>-->
+                            <th:block th:with="mesiac = ${month_list.get(document.planpoint.planmonth.month)}">
+                                <span th:text="|${mesiac}-${document.planpoint.planmonth.year}|">date</span>
+                            </th:block>
+                        </th:block>
+                        <th:block th:unless="${document.planpoint.planmonth}">
+                            Не включено не в один план.
+                        </th:block>
+                    </th:block>
+                    <th:block th:unless="${document.planpoint}">
+                        Не включено не в один план.
+                    </th:block>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Примечание:</label>
+                </td>
+                <td>
+                    <input type="text"
+                           th:field="*{comment}">
+                </td>
+            </tr>
+            <tr th:if="${document.id}">
+                <td colspan="2">Список форматов документа:</td>
+            </tr>
+            <tr th:if="${document.id}" th:each="ff, iter : *{formats}">
+                <td>
+                    <select th:field="*{formats[__${iter.index}__].format}">
+                        <option th:each="f : ${T(nicomed.webpdm.enums.FormatSheet).values()}"
+                                th:value="${f}"
+                                th:text="${f.getName()}"
+                        >Option 1
+                        </option>
+                    </select>
+                </td>
+                <td>
+                    <input type="text" th:field="*{formats[__${iter.index}__].qty}">
+                    <input type="hidden" th:field="*{formats[__${iter.index}__].id}">
+                </td>
+
+            </tr>
+            <tr th:if="${document.id}">
+                <td>
+                    <button type="submit"
+                            th:formaction="@{/mypdm/{usr}/documents/{doc_id}/addformat(usr = ${user}, doc_id = ${document.id})}"
+                    >Добавить формат
+                    </button>
+
+                </td>
+                <td>
+                    <button type="submit"
+                            th:formaction="@{/mypdm/{usr}/documents/{doc_id}/deleteformat(usr = ${user}, doc_id = ${document.id})}"
+                    >Удалить формат
+                    </button>
+                </td>
+            </tr>
+        </form>
+    </table>
+</div>
+
+<!--*****************************************************************************************************************-->
+<div th:fragment="doc_create">
+    <form th:method="post" th:object="${editable_document}">
+        <div>
+            <label>Обозначение:</label>
+            <input type="text"
+                   th:field="*{des}">
+        </div>
+        <div>
+            <label>Наименование:</label>
+            <input type="text"
+                   th:field="*{name}">
+        </div>
+        <div>
+            <label>Цех (первичный):</label>
+            <select th:field="*{workshop}">
+                <option th:each="work : ${T(nicomed.webpdm.enums.Workshop).values()}"
+                        th:value="${work}"
+                        th:text="${work.getName()}"
+                >Option 1
+                </option>
+            </select>
+        </div>
+        <div>
+            <label>Разработчик:</label>
+            <select th:field="*{owner}">
+                <option th:each="owner : ${designer_list}"
+                        th:value="${owner.id}"
+                        th:text="${owner.login}"
+                >Option 1
+                </option>
+            </select>
+        </div>
+        <div>
+            <label>формат:</label><br>
+            <select th:field="*{format}">
+                <option th:each="forma : ${T(nicomed.webpdm.enums.FormatSheet).values()}"
+                        th:value="${forma}"
+                        th:text="${forma}"
+                >Option 1
+                </option>
+            </select>
+        </div>
+        <div>
+            <label>Основание для разработки:</label>
+            <input type="text"
+                   th:field="*{basics}">
+        </div>
+        <div>
+            <label>Примечание:</label>
+            <input type="text"
+                   th:field="*{comment}">
+        </div>
+        <div>
+            <button type="submit"
+                    th:formaction="@{/mypdm/{usr}/documents/create(usr = ${user})}"
+            >Создать
+            </button>
+        </div>
+    </form>
+</div>
+
+
+</body>
+</html>

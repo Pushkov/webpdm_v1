@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--    <meta charset="UTF-8">-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+
+<div data-th-fragment="user_menu">
+    <!--    <form class="col-1" data-th-method="get">-->
+    <!--        <button type="submit">Все документы</button>-->
+    <!--    </form>-->
+    <!--    <form class="col-1" data-th-method="get">-->
+    <!--        <button type="submit">Мои документы</button>-->
+    <!--    </form>-->
+    <form class="col-2" data-th-method="get">
+
+        <button class="button_jqui"
+                type="submit"
+                data-th-formaction="@{/js/{id}/users/create(id = ${user.id})}"
+        >Создать пользователя</button>
+    </form>
+</div>
+
+<!--*****************************************************************************************************************-->
+<!--
+<div data-th-fragment="user_list">
+    <table>
+        <tr>
+            <th>
+                Login
+            </th>
+            <th>
+                Имя
+            </th>
+            <th>
+                Фамилия
+            </th>
+            <th>
+                Бюро
+            </th>
+            <th>
+                Телефон
+            </th>
+            <th>
+                Должность
+            </th>
+            <th>
+            </th>
+        </tr>
+        <tr data-th-each="designer : ${designer_list}">
+            <td data-th-text="${designer.login}"/>
+            </td>
+            <td data-th-text="${designer.firstName}">
+            </td>
+            <td data-th-text="${designer.lastName}">
+            </td>
+            <td data-th-text="${designer.office.name?:''}">
+            </td>
+            <td data-th-text="${designer.phone?:'x'}">
+            </td>
+            <td data-th-text="${designer.role.getName()?:'x'}">
+            </td>
+            <td>
+                <form>
+                    <button class="button_jqui"
+                            style="font-size: .85em"
+                            type="submit"
+                            data-th-formmethod="get"
+                            data-th-formaction="@{/js/{id}/users/{usr_id}(id = ${user.id},usr_id=${designer.id})}"
+                            data-th-utext="${action} == '1'?'Редактировать':'Смотреть'"
+                    >
+                        Изменить
+                    </button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+-->
+<div data-th-fragment="user_list">
+    <script data-th-inline="javascript">
+        var user = [[${user}]];
+        var designers = [[${designer_list}]];
+        var offices = [[${office_list}]];
+    </script>
+    <div >
+        <table id="test_table">
+            <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th><select
+                class="ui-widget"
+             id = "my_filter_office"   >
+                        <option data-th-value="-1" name="office" selected data-th-text="'Все'">Все</option>
+                        <option data-th-each="work : ${office_list}"
+                                data-th-value="${work.getId()}"
+                                data-th-text="${work.getName()}"/>
+                    </select></th>
+                <th></th>
+                <th><select
+                        class="ui-widget"
+                        id = "my_filter_role"   >
+                    <option data-th-value="-1" name="role" selected data-th-text="'Все'">Все</option>
+                    <option data-th-each="role : ${T(nicomed.webpdm.enums.UserRole).values()}"
+                            data-th-value="${role}"
+                            data-th-text="${role}">
+                        role
+                    </option>
+                </select>
+                </th>
+                <th><form><button id="user_filter"
+                            class="button_jqui"
+                            style="width: 100%"
+                            data-th-formaction="@{/js/{id}/users(id = ${user.id})}"
+                >Сброс фильтров</button></form></th>
+            </tr>
+            <tr>
+            <th><button id="user_sort_login" class="button_jqui" style="width: 100%">Логин</button></th>
+            <th><button id="user_sort_first" class="button_jqui" style="width: 100%">Имя</button></th>
+            <th><button id="user_sort_last" class="button_jqui" style="width: 100%">Фамилия</button></th>
+            <th><button id="user_sort_office" class="button_jqui" style="width: 100%">Бюро</button></th>
+            <th><button id="user_sort_phone" class="button_jqui" style="width: 100%">Телефон</button></th>
+            <th><button id="user_sort_role" class="button_jqui" style="width: 100%">Должность</button></th>
+            <th></th>
+            </tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+
+<!--*****************************************************************************************************************-->
+
+<div data-th-fragment="user_single">
+    <table>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Login
+            </th>
+            <th>
+                Имя
+            </th>
+            <th>
+                Фамилия
+            </th>
+            <th>
+                Бюро
+            </th>
+            <th>
+                Телефон
+            </th>
+            <th>
+                Права
+            </th>
+            <th>
+                Статус
+            </th>
+            <th>
+            </th>
+            <th data-th-if="${action} == '1'">
+            </th>
+        </tr>
+        <form data-th-object="${designer}">
+            <tr>
+                <td>
+                    <input type="text" data-th-field="*{id}" hidden="true" readonly = "true">
+                    <span data-th-if="${designer}" data-th-text="${designer.id}">id</span>
+                </td>
+                <td>
+                    <input type="text" data-th-field="*{login}">
+                </td>
+                <td>
+                    <input type="text" data-th-field="*{firstName}">
+                </td>
+                <td>
+                    <input type="text" data-th-field="*{lastName}">
+                </td>
+                <td >
+                    <select data-th-field="*{office.id}">
+                        <option data-th-each="of : ${office_list}"
+                                data-th-value="${of.id}"
+                                data-th-text="${of.getName()}">
+                            office
+                        </option>
+                    </select>
+
+                </td>
+                <td>
+                    <input type="text" data-th-field="*{phone}">
+                </td>
+                <td >
+                    <select data-th-field="*{role}">
+                    <option data-th-each="role : ${T(nicomed.webpdm.enums.UserRole).values()}"
+                            data-th-value="${role}"
+                            data-th-text="${role.getName()}">
+                        role
+                    </option>
+                </select>
+                </td>
+                <td >
+                    <select
+                            data-th-field="*{state}"
+                    >
+                        <option data-th-each="state : ${T(nicomed.webpdm.enums.UserStatus).values()}"
+                                data-th-value="${state}"
+                                data-th-text="${state.getName()}">
+                            state
+                        </option>
+                    </select>
+                </td>
+                <td>
+<!--                    <data-th-block data-th-with="ppp = ">-->
+                        <button class="button_jqui"
+                                style="font-size: .85em"
+                                type="submit"
+                                data-th-formmethod="${action} == '1' ? 'post' : 'post'"
+                                data-th-formaction="@{${action} == '1'?@{/js/{id}/users/{usr_id}/save (id = ${user.id}, usr_id = ${designer.id})} : @{/js/{id}/users/create (id = ${user.id})}}"
+                                data-th-utext="${action} == '1' ? 'Сохранить' : 'Создать'"
+                        >
+                            Изменить
+                        </button>
+<!--                    </data-th-block>-->
+                </td>
+<!--                <span>data-th-formaction="@{/js/{id}/users/{usr_id}(id = ${user.id},usr_id=${designer.id})}"</span>-->
+                <td data-th-if="${action} == '1'">
+                        <button class="button_jqui"
+                                style="font-size: .85em"
+                                type="submit"
+                                data-th-formmethod="get"
+                                data-th-formaction="@{/js/{id}/users/{usr_id}/delete(id = ${user.id},usr_id=${designer.id})}">
+                            Удалить
+                        </button>
+                </td>
+                <td/>
+                <td>
+                    <button id="btn_js_1">
+                        Изменить JS
+                    </button>
+                </td>
+            </tr>
+        </form>
+    </table>
+</div>
+
+<!--*****************************************************************************************************************-->
+
+<div data-th-fragment="user_view">
+    <table data-th-if="${designer}">
+        <tr>
+            <th>
+                Login
+            </th>
+            <th>
+                Имя
+            </th>
+            <th>
+                Фамилия
+            </th>
+            <th>
+                Бюро
+            </th>
+            <th>
+                Телефон
+            </th>
+            <th>
+                Права
+            </th>
+            <th>
+                Статус
+            </th>
+            <th>
+            </th>
+        </tr>
+        <form data-th-object="${designer}">
+            <tr>
+                <td>
+                    <span data-th-unless="${action} == '1'" data-th-text="${designer.login}">login</span>
+                </td>
+                <td>
+                    <span data-th-unless="${action} == '1'" data-th-text="${designer.firstName}">firstName</span>
+                </td>
+                <td>
+                    <span data-th-unless="${action} == '1'" data-th-text="${designer.lastName}">lastName</span>
+                </td>
+                <td data-th-text="${designer.office.name?:''}">
+                </td>
+                <td>
+                    <span data-th-unless="${action} == '1'" data-th-text="${designer.phone}">phone</span>
+                </td>
+                <td data-th-text="${designer.role.getName()?:'права не заданы'}"></td>
+                <td data-th-text="${designer.state.getName()?:'статус не задан'}"></td>
+                <td>
+                    <button class="button_jqui"
+                            style="font-size: .85em"
+                            type="submit"
+                            data-th-formmethod="get"
+                            data-th-formaction="@{${req_path}}"
+                            data-th-utext="Назад"
+                    >
+                        back
+                    </button>
+                </td>
+            </tr>
+        </form>
+    </table>
+    <div class="ui-state-error" data-th-unless="${designer}">
+        <span class="ui-state-error-text" data-th-text="${err}?:''">span</span>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--    <meta charset="UTF-8">-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+
+<div data-th-fragment="doc_menu">
+    <!--    <form class="col-1" data-th-method="get">-->
+    <!--        <button type="submit">Все документы</button>-->
+    <!--    </form>-->
+    <!--    <form class="col-1" data-th-method="get">-->
+    <!--        <button type="submit">Мои документы</button>-->
+    <!--    </form>-->
+    <form class="col-2" data-th-method="get">
+        <button class="button_jqui"
+                type="submit">Создать документ
+        </button>
+    </form>
+</div>
+
+<!--*****************************************************************************************************************-->
+
+<div data-th-fragment="doc_list">
+    <input type="hidden" id="ln" data-th-value="${user.id} "/>
+
+    <table>
+        <tr style="border: none">
+            <form data-th-object="${docfilter_form}">
+                <td style="border: none"></td>
+                <td style="border: none">
+                    <button id="filtes_des"
+                            name="filtes_des"
+                            type="submit"
+                            style="width: 100%"
+                            data-th-text="Обозначение"
+                            data-th-formmethod="get"
+                            data-th-formaction="@{/js/{id}/documents/sort/des(id=${user.id})}"
+                    >Asc
+                    </button>
+                </td>
+                <td style="border: none">
+                    <button id="filtes_name"
+                            name="filtes_name"
+                            type="submit"
+                            style="width: 100%"
+                            data-th-text="Наименование"
+                            data-th-formmethod="get"
+                            data-th-formaction="@{/js/{id}/documents/sort/name(id=${user.id})}"
+                    >Asc
+                    </button>
+                </td>
+                <td style="border: none">
+                    <select id="filter_ws"
+                            name="filtes_ws"
+                            style="width: 76%"
+                            data-th-field="*{workshopId}"
+                    >
+                        <option data-th-value="-1" data-th-text="'Все'">Все</option>
+                        <option data-th-each="work : ${T(nicomed.webpdm.enums.Workshop).values()}"
+                                data-th-value="${work.getId()}"
+                                data-th-text="${work.getName()}"
+                        >workshop
+                        </option>
+                    </select>
+                    <button
+                            type="submit"
+                            style="width: 18%"
+                            data-th-text="."
+                            data-th-formmethod="post"
+                            data-th-formaction="@{/js/{id}/documents(id=${user.id})}"
+                    >Asc
+                    </button>
+                </td>
+                <td style="border: none">
+                    <select id="filter_user"
+                            name="filtes_user"
+                            style="width: 76%"
+                            data-th-field="*{designerId}"
+                    >
+                        <option data-th-value="-1" data-th-text="'Все'">Все</option>
+                        <option data-th-each="ow : ${designer_list}"
+                                data-th-value="${ow.id}"
+                                data-th-text="${ow.lastName}"
+                        >dsigner
+                        </option>
+                    </select>
+                    <button
+                            type="submit"
+                            style="width: 18%"
+                            data-th-text="."
+                            data-th-formmethod="post"
+                            data-th-formaction="@{/js/{id}/documents(id=${user.id})}"
+                    >Asc
+                    </button>
+                </td>
+            </form>
+        </tr>
+        <tr>
+            <th>Пункт<br> плана</th>
+            <th>Обозначение</th>
+            <th>Наименование</th>
+            <th>Цех (первичный)</th>
+            <th>Разработчик</th>
+            <th>Дата создания</th>
+            <th>Формат</th>
+            <th>Примечание</th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr data-th-each="document : ${document_list}">
+            <td data-th-if="${document.planpoint}">
+                <form>
+                    <data-th-block data-th-with="mesiac = ${month_list.get(document.planpoint.planmonth.month)}">
+                        <button class="button_jqui"
+                                style="font-size: .75em"
+                                type="submit"
+                                data-th-disabled="${document.planpoint == null ? 'true':'false'}" data-th-method="get"
+                                data-th-formaction="@{/js/{id}/planing/planpoint/{pp_id}(id = ${user.id}, pp_id = ${document.planpoint.id})}">
+                            <span data-th-text="|${mesiac}-${document.planpoint.planmonth.year} п.${document.planpoint.orderInPlan}|">btn</span>
+                        </button>
+                    </data-th-block>
+                </form>
+            </td>
+            <td data-th-unless="${document.planpoint}">
+            </td>
+
+            <td data-th-text="${document.des}">
+                Обозначение
+            </td>
+            <td data-th-text="${document.name}">
+                Наименование
+            </td>
+            <td data-th-text="${document.workshop.getName() ?:'не задан'}">
+                Цех
+            </td>
+            <td data-th-text="${document.owner.lastName}">
+                Логин разработчика
+            </td>
+            <td data-th-text="${document.getCreationDate()}">
+                Дата
+            </td>
+
+            <td>
+                <span data-th-each="frmt : ${document.formats}"
+                      data-th-text="${frmt.format.getName() + '(' + frmt.getQty() + ') '}"> 1 </span>
+            </td>
+            <td data-th-text="${document.comment?:'*'}">
+                Примечание
+            </td>
+            <td>
+                <form>
+                    <button class="button_jqui"
+                            style="font-size: .85em"
+                            type="submit" data-th-method="get"
+                            data-th-formaction="@{/js/{id}/documents/{doc_id}(id = ${user.id}, doc_id = ${document.id})}">
+                        Edit
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form>
+                    <button class="button_jqui"
+                            style="font-size: .85em"
+                            type="submit" data-th-disabled="${document.owner.login == user.login ? 'false':'true'}"
+                            data-th-method="get"
+                            data-th-formaction="@{/js/{id}/documents/{doc_id}/delete(id = ${user.id}, doc_id = ${document.id})}">
+                        Del
+                    </button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<!--*****************************************************************************************************************-->
+
+<div data-th-fragment="doc_single">
+
+    <table>
+        <form data-th-method="post" data-th-object="${document}">
+            <tr data-th-if="${document.id}">
+                <td colspan="2">
+                    <button class="button_jqui"
+                            type="submit"
+                            data-th-formaction="@{/js/{usr}/documents/{doc_id}/update(usr = ${user.id}, doc_id = ${document.id})}"
+                    >Сохранить документ
+                    </button>
+                </td>
+            </tr>
+            <tr data-th-unless="${document.id}">
+                <td colspan="2">
+                    <button class="button_jqui"
+                            type="submit"
+                            data-th-formaction="@{/js/{usr}/documents/create(usr = ${user.id})}"
+                    >Создать документ
+                    </button>
+                </td>
+            </tr>
+            <tr data-th-if="${document.id}">
+                <td>
+                    <label>Id:</label>
+                </td>
+                <td>
+                    <label data-th-text="*{id}">id_hz</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Обозначение:</label>
+                </td>
+                <td>
+                    <input type="text"
+                           data-th-field="*{des}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Наименование:</label>
+                </td>
+                <td>
+                    <input type="text"
+                           data-th-field="*{name}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Цех (первичный):</label>
+                </td>
+                <td>
+                    <select data-th-field="*{workshop}">
+                        <option data-th-each="work : ${T(nicomed.webpdm.enums.Workshop).values()}"
+                                data-th-value="${work}"
+                                data-th-text="${work.getName()}"
+                        >Option 1
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Разработчик:</label>
+                </td>
+                <td>
+                    <select data-th-field="*{owner.id}">
+                        <option data-th-each="ow : ${designer_list}"
+                                data-th-value="${ow.id}"
+                                data-th-text="${ow.lastName}"
+                        >Option 1
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Пункт плана:</label>
+                </td>
+                <td>
+                    <select data-th-field="*{planpoint.id}">
+                        <option data-th-unless="${document.planpoint}" data-th-value="'null'" data-th-text="'***'"> opt
+                            0
+                        </option>
+                        <option data-th-each="pp : ${planpoint_list}"
+                                data-th-value="${pp.id}"
+                                data-th-text="${pp.name}"
+                        >Option 1
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Включено в план:</label>
+                </td>
+                <td>
+                    <data-th-block data-th-if="${document.planpoint}">
+                        <data-th-block data-th-if="${document.planpoint.planmonth}">
+                            <!--                            <span type="text" data-th-text="${#dates.format(document.planpoint.planmonth.date,'MM-yyyy')}">date</span>-->
+                            <data-th-block
+                                    data-th-with="mesiac = ${month_list.get(document.planpoint.planmonth.month)}">
+                                <span data-th-text="|${mesiac}-${document.planpoint.planmonth.year}|">date</span>
+                            </data-th-block>
+                        </data-th-block>
+                        <data-th-block data-th-unless="${document.planpoint.planmonth}">
+                            Не включено не в один план.
+                        </data-th-block>
+                    </data-th-block>
+                    <data-th-block data-th-unless="${document.planpoint}">
+                        Не включено не в один план.
+                    </data-th-block>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Примечание:</label>
+                </td>
+                <td>
+                    <input type="text"
+                           data-th-field="*{comment}">
+                </td>
+            </tr>
+            <tr data-th-if="${document.id}">
+                <td colspan="2">Список форматов документа:</td>
+            </tr>
+            <tr data-th-if="${document.id}" data-th-each="ff, iter : *{formats}">
+                <td>
+                    <select data-th-field="*{formats[__${iter.index}__].format}">
+                        <option data-th-each="f : ${T(nicomed.webpdm.enums.FormatSheet).values()}"
+                                data-th-value="${f}"
+                                data-th-text="${f.getName()}"
+                        >Option 1
+                        </option>
+                    </select>
+                </td>
+                <td>
+                    <input type="text" data-th-field="*{formats[__${iter.index}__].qty}">
+                    <input type="hidden" data-th-field="*{formats[__${iter.index}__].id}">
+                </td>
+
+            </tr>
+            <tr data-th-if="${document.id}">
+                <td>
+                    <button class="button_jqui"
+                            style="font-size: .85em"
+                            type="submit"
+                            data-th-formaction="@{/js/{usr}/documents/{doc_id}/addformat(usr = ${user.id}, doc_id = ${document.id})}"
+                    >Добавить формат
+                    </button>
+
+                </td>
+                <td>
+                    <button class="button_jqui"
+                            style="font-size: .85em"
+                            type="submit"
+                            data-th-formaction="@{/js/{usr}/documents/{doc_id}/deleteformat(usr = ${user.id}, doc_id = ${document.id})}"
+                    >Удалить формат
+                    </button>
+                </td>
+            </tr>
+        </form>
+    </table>
+</div>
+
+<!--*****************************************************************************************************************-->
+<div data-th-fragment="doc_create">
+    <form data-th-method="post" data-th-object="${editable_document}">
+        <div>
+            <label>Обозначение:</label>
+            <input type="text"
+                   data-th-field="*{des}">
+        </div>
+        <div>
+            <label>Наименование:</label>
+            <input type="text"
+                   data-th-field="*{name}">
+        </div>
+        <div>
+            <label>Цех (первичный):</label>
+            <select data-th-field="*{workshop}">
+                <option data-th-each="work : ${T(nicomed.webpdm.enums.Workshop).values()}"
+                        data-th-value="${work}"
+                        data-th-text="${work.getName()}"
+                >Option 1
+                </option>
+            </select>
+        </div>
+        <div>
+            <label>Разработчик:</label>
+            <select data-th-field="*{owner}">
+                <option data-th-each="owner : ${designer_list}"
+                        data-th-value="${owner.id}"
+                        data-th-text="${owner.login}"
+                >Option 1
+                </option>
+            </select>
+        </div>
+        <div>
+            <label>формат:</label><br>
+            <select data-th-field="*{format}">
+                <option data-th-each="forma : ${T(nicomed.webpdm.enums.FormatSheet).values()}"
+                        data-th-value="${forma}"
+                        data-th-text="${forma}"
+                >Option 1
+                </option>
+            </select>
+        </div>
+        <div>
+            <label>Основание для разработки:</label>
+            <input type="text"
+                   data-th-field="*{basics}">
+        </div>
+        <div>
+            <label>Примечание:</label>
+            <input type="text"
+                   data-th-field="*{comment}">
+        </div>
+        <div>
+            <button class="button_jqui"
+                    style="font-size: .85em"
+                    type="submit"
+                    data-th-formaction="@{/mypdm/{usr}/documents/create(usr = ${user})}"
+            >Создать
+            </button>
+        </div>
+    </form>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/pdm/css/pdm.css">
+    <link rel="stylesheet" href="/pdm/css/jquery-ui.css">
+    <link rel="stylesheet" href="/pdm/css/bootstrap-grid.min.css">
+    <script src="/pdm/js/external/jquery/jquery.js"></script>
+    <script src="/pdm/js/jquery-ui.js"></script>
+    <title>Start page</title>
+</head>
+<body>
+<div class="container-fluid wrapper">
+    <header class="row" data-th-include="~{frg/fr_header.html :: head_acc}">
+    </header>
+    <nav class="row" data-th-include="~{frg/fr_nav.html :: nav_acc}">
+        nav
+    </nav>
+    <main class="row">
+        <div class="container-fluid">
+            <br data-th-if="${action} == 1" />
+            <div class="row no-gutters" data-th-if="${action} == 1" data-th-include="~{frg/fr_user.html :: user_menu}">
+            </div>
+            <br/>
+            <div class="row" data-th-include="~{frg/fr_user.html :: ${fr_user}?:'user_list'}">
+                <div class="col-sm">
+                    main_document
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="row">
+        <div data-th-replace="~{frg/fr_footer.html :: footer_start}">
+        </div>
+    </footer>
+</div>
+
+<script src="/pdm/js/test.js"></script>
+<script src="/pdm/js/pdm.js"></script>
+</body>
+</html>
